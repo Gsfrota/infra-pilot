@@ -1,7 +1,8 @@
-"""Pluggable orchestration engines.
+"""Orchestration engine.
 
-``native``  — zero-heavy-dependency multi-agent loop (default; used in CI).
-``crewai``  — maps the same crew onto CrewAI (optional extra).
+``native`` — a lightweight, dependency-free multi-agent orchestrator that drives
+the full ops loop. It coordinates the agent crew and their tools, and uses an
+optional Anthropic Claude reasoning layer when an API key is available.
 """
 
 from infrapilot.engines.native import NativeEngine
@@ -12,8 +13,4 @@ __all__ = ["NativeEngine", "get_engine"]
 def get_engine(name: str):
     if name == "native":
         return NativeEngine
-    if name == "crewai":
-        from infrapilot.engines.crew import CrewAIEngine  # noqa: PLC0415 - lazy optional dep
-
-        return CrewAIEngine
-    raise ValueError(f"unknown engine '{name}' (choose: native, crewai)")
+    raise ValueError(f"unknown engine '{name}' (available: native)")

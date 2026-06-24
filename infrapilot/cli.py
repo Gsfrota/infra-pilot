@@ -16,9 +16,8 @@ app = typer.Typer(
 console = Console()
 
 
-def _run(engine_name: str, simulate: bool, auto_remediate: bool, artifacts: bool):
-    engine_cls = get_engine(engine_name)
-    engine = engine_cls(simulate=simulate)
+def _run(simulate: bool, auto_remediate: bool, artifacts: bool):
+    engine = get_engine("native")(simulate=simulate)
     result = engine.run(auto_remediate=auto_remediate)
     render_console(result, console)
     if artifacts:
@@ -29,13 +28,12 @@ def _run(engine_name: str, simulate: bool, auto_remediate: bool, artifacts: bool
 
 @app.command()
 def run(
-    engine: str = typer.Option("native", help="Orchestration engine: native | crewai"),
     simulate: bool = typer.Option(False, help="Force-simulate terraform/ansible execution."),
     no_remediate: bool = typer.Option(False, help="Audit only; propose fixes without applying."),
     artifacts: bool = typer.Option(True, help="Write JSON/Markdown report artifacts."),
 ):
     """Run the full ops loop: provision -> configure -> observe -> audit -> remediate."""
-    result = _run(engine, simulate, not no_remediate, artifacts)
+    result = _run(simulate, not no_remediate, artifacts)
     # non-zero exit if anything is still non-compliant (useful as a CI gate)
     raise typer.Exit(code=0 if result.compliance.passed else 2)
 
@@ -45,14 +43,14 @@ def audit(
     simulate: bool = typer.Option(False, help="Force-simulate execution."),
 ):
     """Provision and audit only — never applies remediations (CI compliance gate)."""
-    result = _run("native", simulate, auto_remediate=False, artifacts=False)
+    result = _run(simulate, auto_remediate=False, artifacts=False)
     raise typer.Exit(code=0 if result.compliance.passed else 2)
 
 
 @app.command()
 def demo():
     """Self-contained simulated run — no cloud, no API key, no binaries required."""
-    _run("native", simulate=True, auto_remediate=True, artifacts=True)
+    _run(simulate=True, auto_remediate=True, artifacts=True)
 
 
 @app.command()

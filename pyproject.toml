@@ -5,13 +5,13 @@ build-backend = "hatchling.build"
 [project]
 name = "infra-pilot"
 version = "0.1.0"
-description = "Agentic AI for infrastructure operations — provision, monitor, validate compliance and auto-remediate with Python, MCP, CrewAI, Terraform and Ansible."
+description = "Agentic AI for infrastructure operations — provision, monitor, validate compliance and auto-remediate with Python, MCP, Claude, Terraform and Ansible."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Guilherme Frota Souza", email = "guifrotasouza@gmail.com" }]
 keywords = [
-    "ai-agents", "agentic-ai", "automation", "devops", "mcp", "crewai",
+    "ai-agents", "agentic-ai", "automation", "devops", "mcp", "claude",
     "terraform", "ansible", "infrastructure-as-code", "llm", "compliance",
 ]
 classifiers = [
@@ -29,10 +29,9 @@ dependencies = [
 
 [project.optional-dependencies]
 llm = ["anthropic>=0.40"]
-crewai = ["crewai>=0.70", "anthropic>=0.40"]
 mcp = ["mcp>=1.2"]
 dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.6"]
-all = ["anthropic>=0.40", "crewai>=0.70", "mcp>=1.2"]
+all = ["anthropic>=0.40", "mcp>=1.2"]
 
 [project.scripts]
 infrapilot = "infrapilot.cli:app"

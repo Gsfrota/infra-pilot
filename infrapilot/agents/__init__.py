@@ -1,8 +1,8 @@
 """The InfraPilot agent crew.
 
-Each agent owns a role, a goal and a set of tools. The native engine drives them
-deterministically; the CrewAI engine maps the same roles/goals/tools onto a
-CrewAI ``Crew`` so the orchestration layer is swappable.
+Each agent owns a role, a goal and a set of tools. The orchestrator drives them
+in sequence through the ops loop, and each agent can call the optional Claude
+reasoning layer to triage findings and justify decisions.
 """
 
 from infrapilot.agents.auditor import ComplianceAuditor
