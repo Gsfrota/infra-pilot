@@ -1,0 +1,37 @@
+# Declarative desired state consumed by the Provisioner agent.
+# Mirrors the resources defined in infra/terraform; intentionally seeded with a
+# few non-compliant settings so the audit + remediation loop has work to do.
+resources:
+  - id: web-sg
+    type: security_group
+    provider: aws
+    attributes:
+      ingress:
+        - { port: 22, cidr: "0.0.0.0/0" }      # SEC-001: SSH open to the world
+        - { port: 443, cidr: "0.0.0.0/0" }
+    tags: {}                                     # TAG-001: missing owner tag
+
+  - id: app-data
+    type: storage_bucket
+    provider: aws
+    attributes:
+      encrypted: false                           # ENC-001: encryption disabled
+    tags:
+      owner: platform-team
+
+  - id: api-vm
+    type: compute_instance
+    provider: gcp
+    attributes:
+      cpu: 4
+      public_ip: true
+    tags:
+      owner: platform-team
+
+  - id: edge-router
+    type: network_device
+    provider: on_prem
+    attributes:
+      firmware: "2.1.0"
+    tags:
+      owner: network-team

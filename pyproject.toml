@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "infra-pilot"
+version = "0.1.0"
+description = "Agentic AI for infrastructure operations — provision, monitor, validate compliance and auto-remediate with Python, MCP, CrewAI, Terraform and Ansible."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Guilherme Frota Souza", email = "guifrotasouza@gmail.com" }]
+keywords = [
+    "ai-agents", "agentic-ai", "automation", "devops", "mcp", "crewai",
+    "terraform", "ansible", "infrastructure-as-code", "llm", "compliance",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+llm = ["anthropic>=0.40"]
+crewai = ["crewai>=0.70", "anthropic>=0.40"]
+mcp = ["mcp>=1.2"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.6"]
+all = ["anthropic>=0.40", "crewai>=0.70", "mcp>=1.2"]
+
+[project.scripts]
+infrapilot = "infrapilot.cli:app"
+infrapilot-mcp = "infrapilot.mcp_server.server:main"
+
+[project.urls]
+Homepage = "https://github.com/Gsfrota/infra-pilot"
+Repository = "https://github.com/Gsfrota/infra-pilot"
+
+[tool.hatch.build.targets.wheel]
+packages = ["infrapilot"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "PLC"]
+ignore = ["B008"]  # typer uses function calls in argument defaults by design
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

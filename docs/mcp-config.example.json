@@ -1,0 +1,11 @@
+{
+  "// note": "Add to Claude Desktop (claude_desktop_config.json) or any MCP client.",
+  "mcpServers": {
+    "infrapilot": {
+      "command": "infrapilot-mcp",
+      "env": {
+        "ANTHROPIC_API_KEY": "optional — only needed for LLM reasoning"
+      }
+    }
+  }
+}

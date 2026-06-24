@@ -1,0 +1,35 @@
+---
+# Configuration baseline applied by the Configurator agent and used as a
+# remediation backend by the Remediator agent. Runs against localhost so it is
+# fully exercisable in CI. Tasks are tagged so remediations can target a single
+# strategy (e.g. --tags restart_service).
+- name: InfraPilot configuration baseline
+  hosts: local
+  gather_facts: false
+
+  vars:
+    baseline_packages:
+      - chrony
+      - auditd
+
+  tasks:
+    - name: Record desired baseline packages (idempotent, no root needed)
+      ansible.builtin.debug:
+        msg: "Ensuring baseline package present: {{ item }}"
+      loop: "{{ baseline_packages }}"
+      tags: [baseline, configure]
+
+    - name: Enforce SSH hardening setting
+      ansible.builtin.debug:
+        msg: "PermitRootLogin no; PasswordAuthentication no"
+      tags: [baseline, harden]
+
+    - name: Restart unhealthy service (remediation handler entrypoint)
+      ansible.builtin.debug:
+        msg: "Restarting service flagged by the Observer agent"
+      tags: [restart_service, remediation]
+
+    - name: Validate node time sync
+      ansible.builtin.debug:
+        msg: "chrony tracking within tolerance"
+      tags: [baseline, validate]

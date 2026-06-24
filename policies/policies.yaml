@@ -1,0 +1,35 @@
+# Policy-as-code consumed by the Compliance Auditor agent.
+# `rule` resolves to a checker in infrapilot/tools/compliance_tool.py.
+# `remediation` resolves to a strategy in infrapilot/tools/remediation_tool.py.
+policies:
+  - id: SEC-001
+    name: "No SSH open to the internet"
+    severity: critical
+    resource_type: security_group
+    rule: no_ingress_cidr
+    params: { port: 22, forbidden_cidr: "0.0.0.0/0" }
+    remediation: restrict_sg_ingress
+
+  - id: ENC-001
+    name: "Storage must be encrypted at rest"
+    severity: high
+    resource_type: storage_bucket
+    rule: attribute_equals
+    params: { attribute: encrypted, value: true }
+    remediation: enable_encryption
+
+  - id: TAG-001
+    name: "All resources must carry an owner tag"
+    severity: medium
+    resource_type: "*"
+    rule: required_tag
+    params: { tag: owner }
+    remediation: add_tag
+
+  - id: CAP-001
+    name: "Compute instances must not exceed the size budget"
+    severity: low
+    resource_type: compute_instance
+    rule: attribute_max
+    params: { attribute: cpu, max: 8 }
+    remediation: null

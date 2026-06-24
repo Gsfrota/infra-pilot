@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# InfraPilot runtime artifacts
+.infrapilot/
+
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/.generated/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Env / secrets
+.env
+*.local
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
